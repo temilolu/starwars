@@ -1,15 +1,16 @@
 import React from 'react';
 
-const GenderFilter = ({ gender }) => {
-  //   const filterGender = gender.filter(
-  //     types => types.gender.toLowerCase() === this.props.selectedMovieID.toLowerCase()
-  //   );
+const GenderFilter = ({ GenderSelect, selectGender }) => {
   return (
     <React.Fragment>
-      <select className="custom-select custom-select-lg mb-3">
+      <select
+        className="custom-select custom-select-lg mb-3"
+        onChange={GenderSelect}
+        value={selectGender}
+      >
         <option>All</option>
-        <option>Male</option>
-        <option>Female</option>
+        <option value="male">male</option>
+        <option value="female">female</option>
       </select>
     </React.Fragment>
   );

@@ -6,9 +6,12 @@ export default class CharacterTable extends Component {
     super(props);
 
     this.state = {
-      characters: []
+      characters: [],
+      selectGender: ''
     };
   }
+
+  handleGenderChange = e => this.setState({ selectGender: e.target.value });
 
   componentDidMount() {
     const url = 'https://swapi.co/api/people/';
@@ -40,6 +43,10 @@ export default class CharacterTable extends Component {
       this.props.data.includes(people.url)
     );
 
+    const filterGender = filteredCharacters.filter(
+      item => item.gender.toLowerCase() === this.state.selectGender.toLowerCase()
+    );
+
     const result = filteredCharacters.map(item => Number(item.height));
 
     const tofeet = n => {
@@ -51,7 +58,11 @@ export default class CharacterTable extends Component {
 
     return (
       <React.Fragment>
-        <GenderFilter gender={filteredCharacters} />
+        <GenderFilter
+          GenderSelect={this.handleGenderChange}
+          selectGender={this.state.selectGender}
+        />
+
         <table className="table">
           <thead className="thead-dark">
             <tr>
@@ -61,13 +72,21 @@ export default class CharacterTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {filteredCharacters.map((item, i) => (
-              <tr key={i}>
-                <td>{item.name}</td>
-                <td>{item.gender}</td>
-                <td>{item.height}</td>
-              </tr>
-            ))}
+            {filterGender.length === 0
+              ? filteredCharacters.map((item, i) => (
+                  <tr key={i}>
+                    <td>{item.name}</td>
+                    <td>{item.gender}</td>
+                    <td>{item.height}</td>
+                  </tr>
+                ))
+              : filterGender.map((item, i) => (
+                  <tr key={i}>
+                    <td>{item.name}</td>
+                    <td>{item.gender}</td>
+                    <td>{item.height}</td>
+                  </tr>
+                ))}
 
             <tr>
               <td>Total character: {result.length} </td>
