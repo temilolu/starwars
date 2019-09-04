@@ -3,16 +3,14 @@ import MovieDetails from './MovieDetails';
 
 export default class DropdownList extends Component {
   state = {
-    selectedMovie: ''
+    selectedMovieID: ''
   };
 
   handleChange = e => {
-    this.setState({ selectedMovie: e.target.value });
+    this.setState({ selectedMovieID: this.refs.movieSelector.value });
   };
 
   render() {
-    console.log(this.state.selectedMovie);
-
     if (!this.props.result) {
       return (
         <div className="d-flex justify-content-center mt-5">
@@ -23,16 +21,27 @@ export default class DropdownList extends Component {
       );
     }
 
+    const selectedMovies = this.props.result.find(
+      movie => movie.title.toLowerCase() === this.state.selectedMovieID.toLowerCase()
+    );
+
     return (
       <React.Fragment>
-        <select className="custom-select custom-select-lg mb-3" onChange={this.handleChange}>
-          <option> Select a movie </option>
+        <select
+          className="custom-select custom-select-lg mb-3"
+          onChange={this.handleChange}
+          ref="movieSelector"
+          value={this.state.selectedMovieID}
+        >
+          <option>All</option>
           {this.props.result.map((item, i) => (
-            <option key={i}>{item.title}</option>
+            <option key={i} value={item.title}>
+              {item.title}
+            </option>
           ))}
         </select>
 
-        <MovieDetails />
+        <MovieDetails details={selectedMovies} />
       </React.Fragment>
     );
   }
