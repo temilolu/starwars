@@ -11,8 +11,6 @@ export default class CharacterTable extends Component {
     };
   }
 
-  handleGenderChange = e => this.setState({ selectGender: e.target.value });
-
   componentDidMount() {
     const url = 'https://swapi.co/api/people/';
 
@@ -27,6 +25,8 @@ export default class CharacterTable extends Component {
       })
       .catch(error => console.log(error));
   }
+
+  handleGenderChange = e => this.setState({ selectGender: e.target.value });
 
   render() {
     if (!this.state.characters.results) {
@@ -47,7 +47,10 @@ export default class CharacterTable extends Component {
       item => item.gender.toLowerCase() === this.state.selectGender.toLowerCase()
     );
 
-    const result = filteredCharacters.map(item => Number(item.height));
+    const result =
+      filterGender.length === 0
+        ? filteredCharacters.map(item => Number(item.height))
+        : filterGender.map(item => Number(item.height));
 
     const tofeet = n => {
       let realFeet = (n * 0.3937) / 12;
